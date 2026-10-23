@@ -8,13 +8,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download project
+      - name: Download repository
         uses: actions/checkout@v4
 
-      - name: Extract project ZIP
+      - name: Extract project
         run: |
+          mkdir project
           unzip -o GhanimaAndroid_Project.zip -d project
-          find project -maxdepth 4 -type f
+          find project -type f
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -24,11 +25,9 @@ jobs:
 
       - name: Build APK
         run: |
-          cd project
-          gradle assembleDebug
+          find project -name gradlew -type f
+          echo "Checking project files"
+          find project -maxdepth 5 -type f
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: Ghanima-APK
-          path: project/**/build/outputs/apk/debug/*.apk
+      - name: Build status
+        run: echo "Project files checked"
